@@ -1,18 +1,17 @@
 #include "executor.hpp"
 
+#include <iostream>
 Executor::Executor(const char *infile): infile(infile) {
 }
 
-void Executor::run(void (*printErr)(const std::string& error)) {
+void Executor::run(int argc, char** argv, void (*printErr)(const std::string& error)) {
     // A shared 'context' between 'translation units'
     CXIndex index = clang_createIndex(1, 1);
-    
-    const char *args[] = { "-cc1" };
     
     // The translation of our file.
     CXTranslationUnit tu = clang_parseTranslationUnit(
         index, this->infile,
-        args, 1,
+        argv, argc,
         nullptr, 0,
         CXTranslationUnit_None
     );

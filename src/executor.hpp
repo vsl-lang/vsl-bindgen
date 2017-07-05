@@ -11,7 +11,7 @@ private:
     
 public:
     Executor(const char *infile);
-    void run(void (*printErr)(const std::string& error));
+    void run(int argc, char** argv, void (*printErr)(const std::string& error));
 };
 
 #endif
