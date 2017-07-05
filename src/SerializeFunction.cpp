@@ -17,7 +17,13 @@ SERIALIZE(Function) {
     // qualified so not sure how to do with C++. Likely we'll need to defer.
     std::string displayName = Extract::unwrap(clang_getCursorSpelling(cursor));
     
-    stream << "public func " << displayName;
+    stream << "public ";
+    
+    if (clang_CXXMethod_isStatic(cursor)) {
+        stream << "static ";
+    }
+    
+    stream << "func " << displayName;
     stream << "(";
     
     // Do the args, note: type names are not 100%

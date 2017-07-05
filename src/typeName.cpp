@@ -2,7 +2,8 @@
 #include "typeName.hpp"
 #include <iostream>
 
-const std::string Extract::typeName(CXType type) {
+const std::string Extract::typeName(CXType realType) {
+    CXType type = clang_getCanonicalType(realType);
     switch (type.kind) {
         case CXType_Void: return "Void";
         case CXType_Bool: return "Bool";
@@ -29,11 +30,17 @@ const std::string Extract::typeName(CXType type) {
         
         case CXType_Pointer: return PARENT_TYPE_GENERIC(Pointer, Pointee);
         
+        case CXType_ConstantArray:
         case CXType_VariableArray:
         case CXType_IncompleteArray: return PARENT_TYPE_GENERIC(CArray, ArrayElement);
         
+        case CXType_Record:
+            return VSL_CSTRUCT_PREFIX + TYPE_STRING(type).erase(0, CSTRUCT_PREFIX.length());
+        
+        case CXType_NullPtr: return "Pointer.null";
+        
         default:
-            std::cerr << "unknown type " << type.kind << std::endl;
+            std::cerr << "warn(0): unknown type " << type.kind << std::endl;
             return "Object";
     }
 }

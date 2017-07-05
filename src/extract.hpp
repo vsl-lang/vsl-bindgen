@@ -31,7 +31,7 @@ public:
      * @param  cxstr CXString of str automatically disposed.
      * @return       Ref. to the string so parent can own it
      */
-    static inline const std::string unwrap(CXString cxstr) {
+    static inline std::string unwrap(CXString cxstr) {
         const std::string str = std::string(clang_getCString(cxstr));
         clang_disposeString(cxstr);
         return str;
@@ -49,6 +49,7 @@ public:
      
     static SERIALIZE_H(Function);
     static SERIALIZE_H(CStruct);
+    static SERIALIZE_H(Typedef);
     
     std::ofstream out;
     bool isC;

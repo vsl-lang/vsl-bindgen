@@ -34,7 +34,11 @@ CLANG_VISITOR(Extract::visitor) {
         case CXCursor_FunctionDecl:
             Extract::stringifyFunction(cursor, extractor.out);
             return CXChildVisit_Continue;
-            
+        
+        case CXCursor_TypedefDecl:
+            Extract::stringifyTypedef(cursor, extractor.out);
+            return CXChildVisit_Continue;
+        
         case CXCursor_StructDecl:
             if (extractor.isC) {
                 Extract::stringifyCStruct(cursor, extractor.out);
