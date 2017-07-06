@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <fstream>
+#include <iostream>
 #include <set>
 #include <algorithm>
 
@@ -22,6 +23,8 @@ private:
     Extract& operator =(Extract&&) = delete;
     void operator =(const Extract*) = delete;
     
+    CXLanguageKind language;
+    std::string cutPrefix;
 public:
     static CLANG_VISITOR(visitor);
     static Extract& getInstance();
@@ -52,9 +55,19 @@ public:
     static SERIALIZE_H(Typedef);
     
     std::ofstream out;
-    bool isC;
-    
     void setOut(const std::string);
+    void setCutPrefix(const std::string&);
+    std::string applyCutPrefix(const std::string&);
+    
+    void setLanguage(CXLanguageKind lang) {
+        if (lang <= this->language) return;
+        
+        if (lang == CXLanguage_CPlusPlus) {
+            std::cerr << "warn(1): non-C support is experimental." << std::endl;
+        }
+        this->language = lang;
+    }
+    bool getLanguage() const { return this->language; }
 };
 
 #endif

@@ -7,19 +7,9 @@
  */
 CLANG_VISITOR(Extract::visitor) {
     CXCursorKind kind = clang_getCursorKind(cursor);
-    CXLanguageKind language = clang_getCursorLanguage(cursor);
     
     // Setup extractor
     Extract& extractor = Extract::getInstance();
-    
-    switch (language) {
-        case CXLanguage_C: extractor.isC = true; break;
-        case CXLanguage_CPlusPlus: extractor.isC = false; break;
-        case CXLanguage_Invalid: return CXChildVisit_Continue;
-        default:
-            std::cerr << "err(2): bad language (" << language << ")." << std::endl;
-            exit(1);
-    }
     
     // We only care about declarations so don't care about other stuffs
     if (!clang_isDeclaration(kind)) return CXChildVisit_Continue;
@@ -28,6 +18,17 @@ CLANG_VISITOR(Extract::visitor) {
     // forward declaration and things like that
     CXCursor refCursor = clang_getCursorDefinition(cursor);
     if (!clang_equalCursors(refCursor, cursor)) return CXChildVisit_Continue;
+    
+    CXLanguageKind lang = clang_getCursorLanguage(cursor);
+    
+    switch (lang) {
+        case CXLanguage_C:
+        case CXLanguage_CPlusPlus:
+            extractor.setLanguage(lang); break;
+        default:
+            std::cerr << "err(2): bad language (" << lang << ").";
+            exit(1);
+    }
     
     // Generator
     switch (kind) {
@@ -40,7 +41,7 @@ CLANG_VISITOR(Extract::visitor) {
             return CXChildVisit_Continue;
         
         case CXCursor_StructDecl:
-            if (extractor.isC) {
+            if (extractor.getLanguage() == CXLanguage_C) {
                 Extract::stringifyCStruct(cursor, extractor.out);
                 return CXChildVisit_Continue;
             }

@@ -7,8 +7,10 @@
  */
 SERIALIZE(CStruct) {
     CXType type = clang_getCursorType(cursor);
+    Extract& extractor = Extract::getInstance();
+    
     stream << "public typealias ";
-    stream << Extract::typeName(type) << " = ";
+    stream << extractor.applyCutPrefix(Extract::typeName(type)) << " = ";
     stream << "Bitfield<" << clang_Type_getSizeOf(type) << ">";
     stream << std::endl;
 }

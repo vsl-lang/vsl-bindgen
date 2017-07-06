@@ -23,7 +23,8 @@ SERIALIZE(Function) {
         stream << "static ";
     }
     
-    stream << "func " << displayName;
+    stream << "func ";
+    stream << extractor.applyCutPrefix(displayName);
     stream << "(";
     
     // Do the args, note: type names are not 100%
@@ -52,8 +53,8 @@ SERIALIZE(Function) {
     stream << " -> " << Extract::typeName(clang_getResultType(clang_getCursorType(cursor)));
     
     // The mangled/internal name spec.ing the ABI name
-    std::string binaryName = extractor.isC ?
-        displayName:
+    std::string binaryName = extractor.getLanguage() == CXLanguage_C ?
+        displayName :
         Extract::unwrap(clang_Cursor_getMangling(cursor));
     
     stream << " external(" << binaryName << ");" << std::endl;

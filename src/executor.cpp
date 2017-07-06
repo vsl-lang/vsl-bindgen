@@ -24,6 +24,7 @@ void Executor::run(int argc, char** argv, void (*printErr)(const std::string& er
     // Cursor is what directly references an item whether it be a declaration or
     // a statement, in this case represent translation unit
     CXCursor cursor = clang_getTranslationUnitCursor(tu);
+    
     clang_visitChildren(cursor, Extract::visitor, nullptr);
     
     clang_disposeTranslationUnit(tu);

@@ -1,5 +1,6 @@
 #include "extract.hpp"
 
+
 Extract::Extract() {}
 
 Extract& Extract::getInstance() {
@@ -9,4 +10,13 @@ Extract& Extract::getInstance() {
 
 void Extract::setOut(const std::string file) {
     out.open(file);
+}
+
+void Extract::setCutPrefix(const std::string& prefix) {
+    this->cutPrefix = prefix;
+}
+
+std::string Extract::applyCutPrefix(const std::string& source) {
+    if (source.find(this->cutPrefix) != 0) return source;
+    else return source.substr(this->cutPrefix.length());
 }
