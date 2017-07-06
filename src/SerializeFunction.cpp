@@ -1,4 +1,5 @@
 #include "extract.hpp"
+#include "convertComment.hpp"
 
 /**
  * Writes a C/C++ function to a stream
@@ -7,6 +8,14 @@
  */
 SERIALIZE(Function) {
     Extract& extractor = Extract::getInstance();
+    
+    // Get doc-comments
+    CXComment comment = clang_Cursor_getParsedComment(cursor);
+    if (clang_Comment_getKind(comment) == CXComment_FullComment) {
+        // Is a real comment
+        stream << std::endl;
+        Extract::convertComment(comment, stream);
+    }
     
     // Add inline attribute if clang say to inline
     if (clang_Cursor_isFunctionInlined(cursor)) {

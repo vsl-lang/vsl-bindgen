@@ -12,5 +12,5 @@ SERIALIZE(CStruct) {
     stream << "public typealias ";
     stream << extractor.applyCutPrefix(Extract::typeName(type)) << " = ";
     stream << "Bitfield<" << clang_Type_getSizeOf(type) << ">";
-    stream << std::endl;
+    stream << ";" << std::endl;
 }

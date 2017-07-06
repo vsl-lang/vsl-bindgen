@@ -34,8 +34,15 @@ const std::string Extract::typeName(CXType realType) {
         case CXType_VariableArray:
         case CXType_IncompleteArray: return PARENT_TYPE_GENERIC(CArray, ArrayElement);
         
-        case CXType_Record:
-            return VSL_CSTRUCT_PREFIX + TYPE_STRING(type).erase(0, CSTRUCT_PREFIX.length());
+        case CXType_Record: {
+            std::string typeName = TYPE_STRING(type);
+            
+            // Try to remove `struct`
+            if (typeName.find(CSTRUCT_PREFIX) == 0)
+                return typeName.replace(0, CSTRUCT_PREFIX.length(), VSL_CSTRUCT_PREFIX);
+            else
+                return typeName;
+        }
         
         case CXType_NullPtr: return "Pointer.null";
         

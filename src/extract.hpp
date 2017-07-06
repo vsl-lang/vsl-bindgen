@@ -2,6 +2,8 @@
 #define EXTRACT_H
 
 #include <clang-c/Index.h>
+#include <clang-c/Documentation.h>
+
 #include <memory>
 #include <string>
 #include <fstream>
@@ -49,7 +51,14 @@ public:
      * @return      VSL-friendly string that can be directly insert into ast.
      */
     static const std::string typeName(CXType type);
-     
+    
+    /**
+     * Stringifies a comment to a stream
+     * @param comment   root of comment to
+     * @param stream    stream to write to
+     */
+    static void convertComment(const CXComment, std::ostream&);
+    
     static SERIALIZE_H(Function);
     static SERIALIZE_H(CStruct);
     static SERIALIZE_H(Typedef);

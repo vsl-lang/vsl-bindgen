@@ -5,7 +5,11 @@
 #include <cstdint>
 #include <map>
 
+#define OPT_READ_HEAD  0x1F
+#define OPT_READ_TAIL  0x1E
 #define OPT_CUT_PREFIX 0x4F
+
+typedef uint32_t opt_length_t;
 
 void printUsage() {
     std::cout << "Usage: vsl-bindgen <source> out.vsl [clang opts...]" << std::endl;
@@ -21,12 +25,12 @@ void printErr(const std::string& error) {
 std::map<unsigned, std::string> options;
 
 void getOpts() {
-    while (std::cin.get() == '\x1F') {
-        std::uint32_t optId;
-        std::uint32_t valLen;
+    while (std::cin.get() == OPT_READ_HEAD) {
+        opt_length_t optId;
+        opt_length_t valLen;
         
-        std::cin.read((char*) &optId, sizeof(uint32_t));
-        std::cin.read((char*) &valLen, sizeof(uint32_t));
+        std::cin.read((char*) &optId, sizeof(opt_length_t));
+        std::cin.read((char*) &valLen, sizeof(opt_length_t));
         
         char *value = new char[valLen];
         std::cin.read(value, valLen);
@@ -34,7 +38,7 @@ void getOpts() {
         options[optId] = std::string(value);
         
         char c = std::cin.get();
-        if (c != '\x1E') {
+        if (c != OPT_READ_TAIL) {
             printErr("err(3): malformed bindgen opt format (internal).");
             exit(1);
         }
