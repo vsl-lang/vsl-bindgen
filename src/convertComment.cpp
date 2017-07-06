@@ -40,7 +40,8 @@ void Extract::convertComment(const CXComment comment, std::ostream& stream) {
         }
         
         default:
-            std::cout << "warn(4): cm. #" << clang_Comment_getKind(comment) << std::endl;
+            std::cerr << "warn(4): No support for doc comment #";
+            std::cerr << clang_Comment_getKind(comment) << std::endl;
             break;
     }
 }
