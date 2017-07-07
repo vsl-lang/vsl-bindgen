@@ -24,3 +24,13 @@ install:
     #                            LLVM: llvm-config                             #
     ############################################################################
     - set PATH=%PATH%;C:\Libraries\llvm-4.0.0\bin
+
+build_script:
+    - mkdir build
+    - cd build
+    - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
+
+artifacts:
+    - path: 'vsl-bindgen*'
+      name: VSL Bindgen
+      type: File
