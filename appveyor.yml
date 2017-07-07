@@ -23,6 +23,7 @@ install:
     ############################################################################
     #                            LLVM: llvm-config                             #
     ############################################################################
+    - ls C:\Libraries\llvm-4.0.0\bin
     - set PATH=%PATH%;C:\Libraries\llvm-4.0.0\bin
     ############################################################################
     #                             LLVM: clang-cl                               #
@@ -31,7 +32,7 @@ install:
     - clang-cl -v
     - set CC=clang-cl
     - set CXX=clang-cl
-    - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
+    - call "C:\Program Files (x86)\Microsoft Visual Studio 15.0\VC\vcvarsall.bat" x86_amd64
 
 
 build_script:
