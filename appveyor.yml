@@ -37,7 +37,8 @@ install:
 build_script:
     - mkdir build
     - cd build
-    - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang-cl ..
+    - cmake --build .
 
 artifacts:
     - path: 'vsl-bindgen*'
