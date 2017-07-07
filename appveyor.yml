@@ -1,0 +1,26 @@
+init:
+    - git config --global core.autocrlf true
+
+os:
+  - Visual Studio 2015
+
+platform:
+    - x64
+    - x86
+
+build:
+  verbosity: detailed
+
+install:
+    ############################################################################
+    #                                  Ninja                                   #
+    ############################################################################
+    - set NINJA_URL="https://github.com/ninja-build/ninja/releases/download/v1.7.2/ninja-win.zip"
+    - appveyor DownloadFile %NINJA_URL% -FileName ninja.zip
+    - 7z x ninja.zip -oC:\projects\dev\ninja > nul
+    - set PATH=%PATH%;C:\projects\dev\ninja
+    - ninja --version
+    ############################################################################
+    #                            LLVM: llvm-config                             #
+    ############################################################################
+    - set PATH=%PATH%;C:\Libraries\llvm-4.0.0\bin
