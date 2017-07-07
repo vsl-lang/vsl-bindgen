@@ -23,12 +23,22 @@ set(llvm_config_names llvm-config-5.0 llvm-config50
                       llvm-config)
 find_program(LLVM_CONFIG NAMES ${llvm_config_names})
 
-execute_process(
-    COMMAND "${LLVM_CONFIG}" --cxxflags
-    OUTPUT_VARIABLE LLVMCXX_FLAGS
-)
-message("Loaded with: ${LLVMCXX_FLAGS}")
-add_definitions("${LLVMCXX_FLAGS}")
+# Because Windows needs to feel special, we'll only set lib path for it
+if (WIN32)
+    execute_process(
+        COMMAND "${LLVM_CONFIG}" --includedir
+        OUTPUT_VARIABLE LLVM_INCLUDE_DIR
+    )
+    message("Loaded with: ${LLVM_INCLUDE_DIR}")
+    include_directories("${LLVM_INCLUDE_DIR}")
+else()
+    execute_process(
+        COMMAND "${LLVM_CONFIG}" --cxxflags
+        OUTPUT_VARIABLE LLVMCXX_FLAGS
+    )
+    message("Loaded with: ${LLVMCXX_FLAGS}")
+    add_definitions("${LLVMCXX_FLAGS}")
+endif()
 
 # Linking clang
 # this does not actually specify the library to the linker that is done at the
