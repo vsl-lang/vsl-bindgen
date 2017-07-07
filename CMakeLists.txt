@@ -27,6 +27,7 @@ execute_process(
     COMMAND "${LLVM_CONFIG}" --cxxflags
     OUTPUT_VARIABLE LLVMCXX_FLAGS
 )
+message("Loaded with: ${LLVMCXX_FLAGS}")
 add_definitions("${LLVMCXX_FLAGS}")
 
 # Linking clang
