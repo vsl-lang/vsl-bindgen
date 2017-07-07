@@ -24,6 +24,7 @@ install:
     #                            LLVM: llvm-config                             #
     ############################################################################
     - ls C:\Libraries\llvm-4.0.0\bin
+    - ls C:\Libraries\llvm-4.0.0\include
     - set PATH=%PATH%;C:\Libraries\llvm-4.0.0\bin
     ############################################################################
     #                             LLVM: clang-cl                               #
@@ -38,7 +39,7 @@ install:
 build_script:
     - mkdir build
     - cd build
-    - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang-cl ..
+    - cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release ..
     - cmake --build .
 
 artifacts:

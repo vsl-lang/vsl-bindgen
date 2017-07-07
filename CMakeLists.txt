@@ -29,14 +29,14 @@ if (WIN32)
         COMMAND "${LLVM_CONFIG}" --includedir
         OUTPUT_VARIABLE LLVM_INCLUDE_DIR
     )
-    message("Loaded with: ${LLVM_INCLUDE_DIR}")
+    message("Loaded with (win): ${LLVM_INCLUDE_DIR}")
     include_directories("${LLVM_INCLUDE_DIR}")
 else()
     execute_process(
         COMMAND "${LLVM_CONFIG}" --cxxflags
         OUTPUT_VARIABLE LLVMCXX_FLAGS
     )
-    message("Loaded with: ${LLVMCXX_FLAGS}")
+    message("Loaded with (posix): ${LLVMCXX_FLAGS}")
     add_definitions("${LLVMCXX_FLAGS}")
 endif()
 
