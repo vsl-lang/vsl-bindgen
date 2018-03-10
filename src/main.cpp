@@ -28,15 +28,15 @@ void getOpts() {
     while (std::cin.get() == OPT_READ_HEAD) {
         opt_length_t optId;
         opt_length_t valLen;
-        
+
         std::cin.read((char*) &optId, sizeof(opt_length_t));
         std::cin.read((char*) &valLen, sizeof(opt_length_t));
-        
+
         char *value = new char[valLen];
         std::cin.read(value, valLen);
-        
+
         options[optId] = std::string(value);
-        
+
         char c = std::cin.get();
         if (c != OPT_READ_TAIL) {
             printErr("err(3): malformed bindgen opt format (internal).");
@@ -46,32 +46,40 @@ void getOpts() {
 }
 
 int main(int argc, char **argv) {
+    std::cout << "vsl-bindgen: starting" << std::endl;
+
     // Three args, header, then output
     if (argc < 3) {
         printErr("err(0): expected 3 or more arguments");
         printUsage();
         exit(1);
     }
-    
+
     // Header file
     const auto filename = argv[1];
-    const auto outfile = argv[2];
-    
+    const auto outfile = std::string(argv[2]);
+
     const auto clangArgs = argv + 3;
     const auto clangArgc = argc - 3;
-    
+
     // Set prefixes
     getOpts();
-    
+
     Extract& extractor = Extract::getInstance();
-    extractor.setOut(std::string(outfile));
-    
+    if (outfile == "-") {
+        extractor.setOutStdout();
+    } else {
+        extractor.setOut(outfile);
+    }
+
     // Handle prefix cutting
     auto it = options.find(OPT_CUT_PREFIX);
     if (it != options.end()) extractor.setCutPrefix(it->second);
-    
+
     Executor executor(filename);
     executor.run(clangArgc, clangArgs, &printErr);
-    
+
+    std::cout << "vsl-bindgen: done" << std::endl;
+
     return 0;
 }

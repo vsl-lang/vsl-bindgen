@@ -9,7 +9,11 @@ Extract& Extract::getInstance() {
 }
 
 void Extract::setOut(const std::string file) {
-    out.open(file);
+    out.reset(new std::ofstream(file));
+}
+
+void Extract::setOutStdout() {
+    out.reset(new std::ostream(std::cout.rdbuf()));
 }
 
 void Extract::setCutPrefix(const std::string& prefix) {
